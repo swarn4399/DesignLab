@@ -1,0 +1,159 @@
+{% extends './header.html' %}
+{% block content %}
+
+{% for order in Order %}
+<h4 id="order_id">Order ID : #{{order.order_id}} </h4>
+
+
+<form id="modifyorderform" name="modifyorderform" method="POST" action="dashboard_foodseeker.html">
+	{% csrf_token %}
+  <div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" id="veg" name="veg" onclick="toggleDisableEnableVeg()">
+    <label class="form-check-label" for="veg" >Veg</label>
+  </div>
+  <div class=" row mb-3">
+	<label class="form-label in">Number of food packets for</label><br>
+	  <label for="veg_healthy" class="col-sm-2 col-form-label morein">Healthy</label>
+	  <div class="col-sm-8">
+	    <input type="number" class="form-control " id="veg_healthy" min="1" name="veg_healthy" >
+	  </div>
+	  <br><br>
+	  <label for="veg_ill" class="col-sm-2 col-form-label morein">Ill</label>
+	  <div class="col-sm-8">
+	    <input type="number" class="form-control " id="veg_ill" min="1" name="veg_ill" >
+  	  </div>
+	</div>
+ <div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" id="nonveg" name="nonveg" onclick="toggleDisableEnableNonVeg()">
+    <label class="form-check-label" for="nonveg">Non-Veg</label>
+  </div>
+  <div class=" row mb-3">
+	<label class="form-label in">Number of food packets for</label><br>
+	  <label for="nonveg_healthy" class="col-sm-2 col-form-label morein">Healthy</label>
+	  <div class="col-sm-8">
+	    <input type="number" class="form-control " id="nonveg_healthy" min="1" name="nonveg_healthy" >
+	  </div>
+	  <br><br>
+	  <label for="nonveg_ill" class="col-sm-2 col-form-label morein">Ill</label>
+	  <div class="col-sm-8">
+	    <input type="number" class="form-control " id="nonveg_ill" min="1" name="nonveg_ill" >
+	  </div>
+	</div>
+  <div class="mb-3">
+  	<label for="allergy" class="form-label">Allergic to foods(if any)</label>
+  	<input type="text" id="allergy" class="form-control inp2" name="allergy" >
+  </div>
+  <div>
+  	<label for="delivery_address" class="form-label">Delivery address</label>
+	  <select name="delivery_address" id="delivery_address" class="form-control inp2" name="delivery_address" >
+	  	{% for addr in Addresses %}
+				<option>{{ addr.address }}  </option>
+			{% endfor %}
+	  </select>
+  </div>
+  <input type="hidden" name="order_id" value="{{order.order_id}}">
+  <input type="hidden" name="modify_or_cancel" id="modify_or_cancel">
+  <button type="button" id="cancel_order" class="btn btn-lg btn-primary " onclick="submitFormToCancel()">Cancel Order</button>
+  <button type="button" id="post_modified_order" class="btn btn-lg btn-success " onclick="submitForm()">Post Order</button>
+</form>
+
+
+
+<script type="text/javascript">
+		if({{order.veg_healthy}} ==0 && {{order.veg_ill}} ==0){
+			document.getElementById("veg_healthy").disabled=true;
+			document.getElementById("veg_ill").disabled=true;
+		}
+		else {
+			document.getElementById("veg").checked=true;
+			if( {{order.veg_healthy}} !=0)
+				document.getElementById("veg_healthy").value={{order.veg_healthy}}
+			if( {{order.veg_ill}} !=0)
+				document.getElementById("veg_ill").value={{order.veg_ill}}
+			
+		}
+
+		if({{order.nonveg_healthy}} ==0 && {{order.nonveg_ill}} ==0){
+			document.getElementById("nonveg_healthy").disabled=true;
+			document.getElementById("nonveg_ill").disabled=true;
+		}
+		else{
+			document.getElementById("nonveg").checked=true;
+			if( {{order.nonveg_healthy}} !=0)
+				document.getElementById("nonveg_healthy").value={{order.nonveg_healthy}};
+			if( {{order.nonveg_ill}} !=0)
+				document.getElementById("nonveg_ill").value={{order.nonveg_ill}};
+		}
+
+		if('{{order.allergies}}' != 'None' ){
+			document.getElementById("allergy").value='{{order.allergies}}';
+		}
+
+		document.getElementById("delivery_address").value ='{{order.delivery_address}}';
+
+
+	function toggleDisableEnableVeg(){
+		if (document.getElementById("veg_healthy").disabled) {
+	        document.getElementById("veg_healthy").disabled = false;
+	    }
+	    else {
+	        document.getElementById("veg_healthy").disabled = true;
+	        document.getElementById("veg_healthy").value="";
+	    }
+	    if (document.getElementById("veg_ill").disabled) {
+	        document.getElementById("veg_ill").disabled = false;
+	    }
+	    else {
+	        document.getElementById("veg_ill").disabled = true;
+	        document.getElementById("veg_ill").value="";
+	    }
+	}
+
+	function toggleDisableEnableNonVeg(){
+	    if (document.getElementById("nonveg_healthy").disabled) {
+	        document.getElementById("nonveg_healthy").disabled = false;
+	    }
+	    else {
+	        document.getElementById("nonveg_healthy").disabled = true;
+	        document.getElementById("nonveg_healthy").value="";
+	    }
+	    if (document.getElementById("nonveg_ill").disabled) {
+	        document.getElementById("nonveg_ill").disabled = false;
+	    }
+	    else {
+	        document.getElementById("nonveg_ill").disabled = true;
+	        document.getElementById("nonveg_ill").value="";
+	    }
+	}
+
+	function submitForm() {
+		var error="";
+		if(document.getElementById('veg').checked){
+			if(document.getElementById('veg_healthy').value + document.getElementById('veg_ill').value <1)
+				error="Error: Checkbox for veg is selected but no. of packets is 0.";
+		}
+		if(document.getElementById('nonveg').checked){
+			if(document.getElementById('nonveg_healthy').value + document.getElementById('nonveg_ill').value <1)
+				error="Error: Checkbox for non-veg is selected but no. of packets is 0.";
+		}
+
+		if(!document.getElementById('veg').checked && !document.getElementById('nonveg').checked)
+					error = "Error: Total number of food packets is 0."
+
+		if (error !="")
+			alert(error)
+		else{
+			document.getElementById("modify_or_cancel").value="modify";
+			document.modifyorderform.submit();
+		}
+	
+	}
+
+	function submitFormToCancel() {
+		document.getElementById("modify_or_cancel").value="cancel";
+		document.modifyorderform.submit();
+	}
+
+</script>
+{% endfor %}
+{% endblock %}

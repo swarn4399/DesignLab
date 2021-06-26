@@ -1,0 +1,59 @@
+{% extends './header.html' %}
+
+{% block content %}
+<div class="alert alert-success" id="alert_box"></div>
+<div id="dashboard_fs">
+<h2> Existing Orders:-</h2>
+	{% for orders in Orders %}
+	<p><b> Order ID: {{ orders.order_id }} </b>
+		<br> veg healthy: {{orders.veg_healthy}} , veg ill: {{orders.veg_ill}}, nonveg healthy: {{orders.nonveg_healthy}}, nonveg ill: {{orders.nonveg_ill}} 
+		<br> Allergies: {{orders.allergies}}
+		<br> Delivery Address: {{orders.delivery_address}}	<br>	 
+		<form action="modifyorder.html" method="POST">
+			{% csrf_token %}
+			<input type="hidden" name="modify_order_id" value="{{orders.order_id }}">
+			<button type="submit" >Modify Order</button>	
+		</form>
+		<hr>
+	</p>
+	{% endfor %}
+
+<br><br><br>
+<form action="raiseorder.html">
+	{% csrf_token %}
+<button type="submit" >Raise Order</button>
+</form>
+</div>
+
+<script type="text/javascript">
+	
+	if("{{type_of_alert}}" =="raise_order")
+		document.getElementById("alert_box").innerHTML="Your order has been posted successfully";
+	else if("{{type_of_alert}}"=="modify_order")
+		document.getElementById("alert_box").innerHTML="Your order has been modified successfully";
+	else if("{{type_of_alert}}"=="cancel_order")
+		document.getElementById("alert_box").innerHTML="Your order has been cancelled successfully";
+	else
+		document.getElementById("alert_box").style.display="none";
+	
+	var opacity =0;
+	setInterval("hide()",200);
+	
+	function hide()
+	{
+		var alert_box = document.getElementById("alert_box");
+		opacity = Number(window.getComputedStyle(alert_box).getPropertyValue("opacity"));
+		if(opacity>0)
+		{
+			opacity=opacity-0.1;
+			alert_box.style.opacity=opacity;
+		}
+		else
+		{
+			document.getElementById("alert_box").style.display='none';
+		}
+	}
+
+</script>
+{% endblock %}
+

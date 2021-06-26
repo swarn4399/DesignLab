@@ -1,0 +1,9 @@
+
+{% block content%}
+<form method="POST" name="myform" id="myform" action="dashboard_foodseeker.html">
+{% csrf_token %}
+Enter your mobile number: 
+<input type="text" name="mobile_number">
+<button type="submit">Sign In</button>
+</form>
+{% endblock %}
