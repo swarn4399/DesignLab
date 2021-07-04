@@ -94,19 +94,25 @@
 	function submitForm() {
 		var error="";
 		if(document.getElementById('veg').checked){
-			if(document.getElementById('veg_healthy').value + document.getElementById('veg_ill').value <1)
+			if(document.getElementById('veg_healthy').value + document.getElementById('veg_ill').value <1){
 				error="Checkbox for veg is selected but no. of packets is 0.";
 				document.getElementById('error_veg').innerHTML=error;
 				document.getElementById('error_veg').style.display='block';
+			}
+			else
+			document.getElementById('error_veg').style.display='none';
 		}
 		else
 			document.getElementById('error_veg').style.display='none';
 
 		if(document.getElementById('nonveg').checked){
-			if(document.getElementById('nonveg_healthy').value + document.getElementById('nonveg_ill').value <1)
+			if(document.getElementById('nonveg_healthy').value + document.getElementById('nonveg_ill').value <1){
 				error="Checkbox for non-veg is selected but no. of packets is 0.";
 				document.getElementById('error_nonveg').innerHTML=error;
 				document.getElementById('error_nonveg').style.display='block';
+			}
+			else
+			document.getElementById('error_nonveg').style.display='none';
 		}
 		else
 			document.getElementById('error_nonveg').style.display='none';
@@ -120,7 +126,6 @@
 		else
 			document.getElementById('error_total').style.display='none';
 
-//		alert(error)
 		if (error =="")
 		{
 			document.raiseorderform.submit();
