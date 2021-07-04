@@ -7,9 +7,11 @@
 
 <form id="modifyorderform" name="modifyorderform" method="POST" action="dashboard_foodseeker.html">
 	{% csrf_token %}
+	<div id="error_total" class="error_divs"></div>
   <div class="mb-3 form-check">
     <input type="checkbox" class="form-check-input" id="veg" name="veg" onclick="toggleDisableEnableVeg()">
     <label class="form-check-label" for="veg" >Veg</label>
+    <div id="error_veg" class="error_divs"></div>
   </div>
   <div class=" row mb-3">
 	<label class="form-label in">Number of food packets for</label><br>
@@ -26,6 +28,7 @@
  <div class="mb-3 form-check">
     <input type="checkbox" class="form-check-input" id="nonveg" name="nonveg" onclick="toggleDisableEnableNonVeg()">
     <label class="form-check-label" for="nonveg">Non-Veg</label>
+    <div id="error_nonveg" class="error_divs"></div>
   </div>
   <div class=" row mb-3">
 	<label class="form-label in">Number of food packets for</label><br>
@@ -130,19 +133,34 @@
 		var error="";
 		if(document.getElementById('veg').checked){
 			if(document.getElementById('veg_healthy').value + document.getElementById('veg_ill').value <1)
-				error="Error: Checkbox for veg is selected but no. of packets is 0.";
+				error="Checkbox for veg is selected but no. of packets is 0.";
+				document.getElementById('error_veg').innerHTML=error;
+				document.getElementById('error_veg').style.display='block';
 		}
+		else
+			document.getElementById('error_veg').style.display='none';
+
 		if(document.getElementById('nonveg').checked){
 			if(document.getElementById('nonveg_healthy').value + document.getElementById('nonveg_ill').value <1)
-				error="Error: Checkbox for non-veg is selected but no. of packets is 0.";
+				error="Checkbox for non-veg is selected but no. of packets is 0.";
+				document.getElementById('error_nonveg').innerHTML=error;
+				document.getElementById('error_nonveg').style.display='block';
 		}
+		else
+			document.getElementById('error_nonveg').style.display='none';
+		
 
-		if(!document.getElementById('veg').checked && !document.getElementById('nonveg').checked)
-					error = "Error: Total number of food packets is 0."
+		if(!document.getElementById('veg').checked && !document.getElementById('nonveg').checked){
+					error = "Total number of food packets is 0."
+					document.getElementById('error_total').innerHTML=error;
+					document.getElementById('error_total').style.display='block';
+				}
+		else
+			document.getElementById('error_total').style.display='none';
 
-		if (error !="")
-			alert(error)
-		else{
+	//	alert(error)
+		if (error =="")
+		{
 			document.getElementById("modify_or_cancel").value="modify";
 			document.modifyorderform.submit();
 		}

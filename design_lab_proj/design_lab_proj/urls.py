@@ -24,9 +24,9 @@ from raisemodifyorder.views import header
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('raisemodifyorder/raiseorder.html', raiseorder),
-    path('raisemodifyorder/modifyorder.html', modifyorder),
-    path('raisemodifyorder/signin.html', signin),
-    path('raisemodifyorder/dashboard_foodseeker.html', dashboard_foodseeker),
-    path('raisemodifyorder/header.html',header)
+    path('raisemodifyorder/raiseorder.html', raiseorder, name='raiseorder'),
+    path('raisemodifyorder/modifyorder.html', modifyorder, name='modifyorder'),
+    path('raisemodifyorder/signin.html', signin, name='signin'),
+    path('raisemodifyorder/dashboard_foodseeker.html', dashboard_foodseeker, name='dashboard_foodseeker'),
+    path('raisemodifyorder/header.html',header, name='header')
 ]
