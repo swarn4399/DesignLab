@@ -100,20 +100,5 @@ class ViewsTesting(TestCase):
 		self.assertTemplateUsed(response,'raisemodifyorder/signin.html')
 
 	def test_view_dashboard_foodseeker(self):
-		client =Client()
-		request=RequestFactory().get('')
-		request.session={}
-		print(request.session)
-		response=client.post(reverse('dashboard_foodseeker'),{'username':'testuser','password':'testpassword','mobile':'7878787878'})
-	#	request.session['mobile']='7878787878'
-	#	response=client.get(reverse('dashboard_foodseeker'))
-	#	self.assertEquals(response.status_code,200)
-	#	self.assertTemplateUsed(response,'raisemodifyorder/dashboard_foodseeker.html')
-
-
-	#		fs_test=FoodSeeker({'fs_id':1,'name':'TestUser', 'mobile':'1234554321', 'email': 'testuser@gmail.com'})
-	#	fs_test.save()
-		
-	#	response=client.post(reverse('dashboard_foodseeker'),fs_test,format='text/html')
-		#response=client.get(reverse('dashboard_foodseeker'))
+		pass
 		
