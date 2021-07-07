@@ -89,3 +89,26 @@ def modifyorder(request):
 	order=Order.objects.filter(order_id=modify_order_id)
 	addr=Addresses.objects.filter(person_role='food seeker',person_id=fs_id)
 	return render(request, 'raisemodifyorder/modifyorder.html',{'FoodSeekers': fs, 'Order': order, 'Addresses': addr})
+
+def findorderSelectAddress(request):
+        fp_id=request.session['fp_id']
+	fp= FoodSeeker.objects.filter(fp_id=fp_id)
+	addresses=Addresses.objects.filter(person_role='food provider',person_id=fp_id)
+	return render(request, 'findorder/selectaddress.html',{'addresses':address,})
+
+def findorderSelectOrder(request):
+        fp_id=request.session['fp_id']
+        fp= FoodSeeker.objects.filter(fp_id=fp_id)
+        fp_address=Addresses.objects.filter(address_id=request.POST.get("addressId"))
+        #todo-add distance checks for list sorting
+        orderList = Order.objects.filter(status="active")
+        choice = request.POST.get("choice")
+        if choice == "veg_healthy":
+                orderList = orderList.filter(veg_healthy=True)
+        elif choice == "nonveg_healthy":
+                orderList = orderList.filter(nonveg_healthy=True)
+        elif choice == "veg_ill":
+                orderList = orderList.filter(veg_ill=True)
+        else:
+                orderList = orderList.filter(nonveg_healthy=True)
+        return render(request, 'findorder/selectOrder.html',{'orders':orderList})

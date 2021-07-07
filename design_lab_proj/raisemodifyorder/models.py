@@ -9,10 +9,10 @@ class FoodSeeker(models.Model):
 	email=models.CharField(max_length=100)
 
 class Addresses(models.Model):
+        add_id=models.CharField()
 	person_id=models.IntegerField()
 	person_role=models.CharField(max_length=50) #food seeker or food provider
 	address=models.CharField(max_length=200)
-
 
 class Order(models.Model):
 	order_id=models.AutoField(primary_key=True)
@@ -26,3 +26,9 @@ class Order(models.Model):
 	food_seeker_id=models.IntegerField()
 	food_provider_id=models.IntegerField(null=True)
 
+class FoodProvider(models.Model):
+        fp_id=models.AutoField(primary_key=True)
+        name=models.CharField(max_length=100)
+        mobile=models.CharField(max_length=100)
+        email=models.CharField(max_length=100)
+        ratings=models.FloatField()
